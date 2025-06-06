@@ -27,5 +27,14 @@ resource "aws_instance" "web" {
   tags = {
     Name = "WebServerInstance"
   }
+
+  user_data = <<-EOF
+              #!/bin/bash
+              REGION=$(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\\" '{print $4}')
+              curl -O https://s3.amazonaws.com/amazon-ssm-us-east-2/latest/debian_amd64/amazon-ssm-agent.deb
+              dpkg -i amazon-ssm-agent.deb
+              systemctl enable amazon-ssm-agent
+              systemctl start amazon-ssm-agent
+              EOF
 }
 
