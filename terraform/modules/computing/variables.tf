@@ -18,3 +18,8 @@ variable "instance_type" {
   type        = string
 }
 
+variable "instance_profile_names" {
+  description = "Optional list of IAM instance profile names to assign to EC2 instances"
+  type        = list(string)
+  default     = []
+}
