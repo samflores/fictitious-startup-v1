@@ -42,10 +42,85 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+resource "aws_iam_role" "ssm_role" {
+  name = "ssm-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_instance_profile" "ssm_profile" {
+  name = "ssm-instance-profile"
+  role = aws_iam_role.ssm_role.name
+}
+
+resource "aws_iam_role_policy" "ssm_custom_policy" {
+  name = "ssm-custom-policy"
+  role = aws_iam_role.ssm_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:DescribeAssociation",
+          "ssm:GetDeployablePatchSnapshotForInstance",
+          "ssm:GetDocument",
+          "ssm:DescribeDocument",
+          "ssm:GetManifest",
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:ListAssociations",
+          "ssm:ListInstanceAssociations",
+          "ssm:PutInventory",
+          "ssm:PutComplianceItems",
+          "ssm:PutConfigurePackageResult",
+          "ssm:UpdateAssociationStatus",
+          "ssm:UpdateInstanceAssociationStatus",
+          "ssm:UpdateInstanceInformation"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 module "computing" {
-  source        = "./modules/computing"
-  vpc_id        = module.networking.vpc_id
-  subnet_id     = element(module.networking.public_subnet_ids, 0)
-  instance_type = "t2.micro"
-  ami_id        = data.aws_ami.ubuntu.id
+  source                 = "./modules/computing"
+  vpc_id                 = module.networking.vpc_id
+  subnet_id              = element(module.networking.public_subnet_ids, 0)
+  instance_type          = "t2.micro"
+  ami_id                 = data.aws_ami.ubuntu.id
+  instance_profile_names = [aws_iam_instance_profile.ssm_profile.name]
 }
