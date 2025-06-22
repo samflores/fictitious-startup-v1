@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "dms_assume_role" {
 
 resource "aws_iam_role" "dms_access_for_endpoint" {
   assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
-  name               = "dms_access_for_endpoint"
+  name               = "dms-access-for-endpoint"
 }
 
 resource "aws_iam_role_policy_attachment" "dms_access_for_endpoint_AmazonDMSRedshiftS3Role" {
@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "dms_access_for_endpoint_AmazonDMSReds
 
 resource "aws_iam_role" "dms_cloudwatch_logs_role" {
   assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
-  name               = "dms_cloudwatch_logs_role"
+  name               = "dms-cloudwatch-logs-role"
 }
 
 resource "aws_iam_role_policy_attachment" "dms_cloudwatch_logs_role_AmazonDMSCloudWatchLogsRole" {
@@ -31,7 +31,7 @@ resource "aws_iam_role_policy_attachment" "dms_cloudwatch_logs_role_AmazonDMSClo
 
 resource "aws_iam_role" "dms_vpc_role" {
   assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
-  name               = "dms_vpc_role"
+  name               = "dms-vpc-role"
 }
 
 resource "aws_iam_role_policy_attachment" "dms_vpc_role_AmazonDMSVPCManagementRole" {
