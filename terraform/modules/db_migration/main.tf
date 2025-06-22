@@ -41,7 +41,7 @@ resource "aws_iam_role_policy_attachment" "dms_vpc_role_AmazonDMSVPCManagementRo
 
 resource "aws_dms_replication_subnet_group" "replication_sg" {
   replication_subnet_group_description = "replication subnet group"
-  replication_subnet_group_id          = "bootcamp_replication_sg"
+  replication_subnet_group_id          = "bootcamp-replication-sg"
 
   subnet_ids = var.subnet_ids
 }
