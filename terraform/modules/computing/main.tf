@@ -15,7 +15,7 @@ resource "aws_vpc_security_group_ingress_rule" "postgres" {
   from_port         = 5432
   to_port           = 5432
   ip_protocol       = "tcp"
-  cidr_ipv4         = "${var.ip_allowed_to_access_db}/24"
+  cidr_ipv4         = "${var.ip_allowed_to_access_db}/32"
 }
 
 resource "aws_vpc_security_group_egress_rule" "all" {
