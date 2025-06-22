@@ -98,6 +98,7 @@ variable "old_db_password" {
 
 module "database" {
   source            = "./modules/database"
+  db_name           = "mvp"
   password          = var.db_password
   username          = var.db_username
   vpc_id            = module.networking.vpc_id
