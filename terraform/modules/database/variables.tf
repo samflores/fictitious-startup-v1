@@ -13,9 +13,9 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "The subnet ID where the database will be deployed"
-  type        = string
+variable "subnet_ids" {
+  description = "The subnet IDs where the database will be deployed"
+  type        = list(string)
 }
 
 variable "subnet_group_name" {
