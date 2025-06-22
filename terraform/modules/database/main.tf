@@ -5,6 +5,7 @@ resource "aws_db_instance" "database" {
   instance_class    = "db.t3.micro"
   username          = var.username
   password          = var.password
+  db_name           = var.db_name
 
   db_subnet_group_name   = aws_db_subnet_group.database_sng.name
   parameter_group_name   = aws_db_parameter_group.pg_parameter_group.name

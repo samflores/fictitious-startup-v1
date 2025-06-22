@@ -1,3 +1,8 @@
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}
+
 variable "username" {
   description = "Database administrator username"
   type        = string
