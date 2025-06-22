@@ -15,7 +15,7 @@ resource "aws_db_instance" "database" {
 
 resource "aws_db_subnet_group" "database_sng" {
   name       = var.subnet_group_name
-  subnet_ids = [var.subnet_id]
+  subnet_ids = var.subnet_ids
 
   tags = {
     Name = "DB subnet group"

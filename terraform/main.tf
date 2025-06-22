@@ -94,6 +94,6 @@ module "database" {
   password          = var.db_password
   username          = var.db_username
   vpc_id            = module.networking.vpc_id
-  subnet_id         = element(module.networking.private_subnet_ids, 0)
+  subnet_ids        = module.networking.private_subnet_ids
   subnet_group_name = "bootcamp_db_subnet_group"
 }
