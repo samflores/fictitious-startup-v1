@@ -65,12 +65,13 @@ resource "aws_iam_role_policy_attachment" "ssm_managed_policy" {
 }
 
 module "computing" {
-  source                 = "./modules/computing"
-  vpc_id                 = module.networking.vpc_id
-  subnet_id              = element(module.networking.public_subnet_ids, 0)
-  instance_type          = "t2.micro"
-  ami_id                 = data.aws_ami.ubuntu.id
-  instance_profile_names = [aws_iam_instance_profile.ssm_profile.name]
+  source                  = "./modules/computing"
+  vpc_id                  = module.networking.vpc_id
+  subnet_id               = element(module.networking.public_subnet_ids, 0)
+  instance_type           = "t2.micro"
+  ami_id                  = data.aws_ami.ubuntu.id
+  instance_profile_names  = [aws_iam_instance_profile.ssm_profile.name]
+  ip_allowed_to_access_db = module.db_migrator.address
 }
 
 #############
@@ -89,6 +90,12 @@ variable "db_password" {
   sensitive   = true
 }
 
+variable "old_db_password" {
+  description = "Old database administrator password"
+  type        = string
+  sensitive   = true
+}
+
 module "database" {
   source            = "./modules/database"
   password          = var.db_password
@@ -96,4 +103,20 @@ module "database" {
   vpc_id            = module.networking.vpc_id
   subnet_ids        = module.networking.private_subnet_ids
   subnet_group_name = "bootcamp_db_subnet_group"
+}
+
+module "db_migrator" {
+  source = "./modules/db_migration"
+
+  subnet_ids = module.networking.private_subnet_ids
+
+  source_db_server   = module.computing.address
+  source_db_name     = "mvp"
+  source_db_username = var.db_username
+  source_db_password = var.old_db_password
+
+  target_db_server   = module.database.address
+  target_db_name     = "mvp"
+  target_db_username = var.db_username
+  target_db_password = var.db_password
 }
