@@ -34,3 +34,4 @@ jobs:
         env:
           TF_VAR_db_username: ${{ secrets.DB_USER }}
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+          TF_VAR_old_db_password: ${{ secrets.OLD_DB_PASSWORD }}

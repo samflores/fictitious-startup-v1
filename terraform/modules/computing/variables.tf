@@ -23,3 +23,8 @@ variable "instance_profile_names" {
   type        = list(string)
   default     = []
 }
+
+variable "ip_allowed_to_access_db" {
+  description = "IP allowed to access DB"
+  type        = string
+}
