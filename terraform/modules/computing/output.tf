@@ -1,4 +1,4 @@
 output "address" {
   description = "The instance IP"
-  value       = aws_instance.web.private_dns
+  value       = aws_instance.web.private_ip
 }
